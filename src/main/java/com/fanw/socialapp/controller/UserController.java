@@ -79,7 +79,10 @@ public class UserController {
         }
         return "Fail";
     }
-
+    /*
+    * 使用邮箱注册
+    * @param user_mail,user_pwd
+    * */
     @RequestMapping(value = "/mailRegister",method = RequestMethod.POST)
     public String userRegisterByMail(User user){
         int test = userService.registerUserByMail(user);
