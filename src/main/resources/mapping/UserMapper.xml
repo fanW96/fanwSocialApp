@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fanw.socialapp.mapper.UserMapper">
+    <!--返回结果的属性和列名的对应，以及他们在数据库里的属性-->
+    <resultMap id="userMap" type="com.fanw.socialapp.model.User">
+        <result column="user_id" property="user_id" jdbcType="INTEGER"/>
+        <result column="user_name" property="user_name" jdbcType="VARCHAR"/>
+        <result column="user_pwd" property="user_pwd" jdbcType="VARCHAR"/>
+        <result column="user_head" property="user_head" jdbcType="VARCHAR"/>
+        <result column="user_mail" property="user_mail" jdbcType="VARCHAR"/>
+        <result column="user_phone" property="user_phone" jdbcType="VARCHAR"/>
+        <result column="user_starus" property="user_status" jdbcType="BIT"/>
+    </resultMap>
+    <!--多次使用的sql语句里的部分-->
+    <sql id="user_base_column_list">
+        user_id,user_name,user_pwd,user_mail,user_phone,user_status
+    </sql>
+    <!--selectByMail的映射的查询语句-->
+    <select id="selectByMail" resultMap="userMap" parameterType="User">
+        SELECT
+        <include refid="user_base_column_list"/>
+        FROM users
+        WHERE user_mail=#{user_mail} AND user_pwd=#{user_pwd}
+    </select>
+    <!--selectByPhone的映射查询语句-->
+    <select id="selectByPhone" resultMap="userMap" parameterType="User">
+        SELECT
+        <include refid="user_base_column_list"/>
+        FROM users
+        WHERE user_phone=#{user_phone} AND user_pwd=#{user_pwd}
+    </select>
+    <!--更新头像-->
+    <update id="uploadHeadById" parameterType="User">
+        UPDATE
+        users
+        SET user_head=#{user_head}
+        WHERE  user_id=#{user_id}
+    </update>
+    <!--注册用户-->
+    <insert id="insertByMail" parameterType="User">
+        INSERT INTO
+        users (user_mail,user_pwd,user_name)
+        VALUES (#{user_mail},#{user_pwd},#{user_name})
+    </insert>
+    <!--更新用户的登陆状态-->
+    <update id="updateStatusById" parameterType="User">
+        UPDATE
+        users
+        SET user_status=#{user_status}
+        WHERE user_id = #{user_id}
+    </update>
+
+</mapper>

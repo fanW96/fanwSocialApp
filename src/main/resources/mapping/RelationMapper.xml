@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fanw.socialapp.mapper.RelationMapper">
+    <resultMap id="relationMap" type="com.fanw.socialapp.model.Relation">
+        <result column="relation_id" property="relation_id" jdbcType="INTEGER"/>
+        <association property="up" javaType="com.fanw.socialapp.model.User">
+            <result column="up_id" property="user_id" jdbcType="INTEGER"/>
+            <result column="up_name" property="user_name" jdbcType="VARCHAR"/>
+            <result column="up_pwd" property="user_pwd" jdbcType="VARCHAR"/>
+            <result column="up_head" property="user_head" jdbcType="VARCHAR"/>
+            <result column="up_mail" property="user_mail" jdbcType="VARCHAR"/>
+            <result column="up_phone" property="user_phone" jdbcType="VARCHAR"/>
+            <result column="up_starus" property="user_status" jdbcType="BIT"/>
+        </association>
+        <association property="fan" javaType="com.fanw.socialapp.model.User">
+            <result column="fan_id" property="user_id" jdbcType="INTEGER"/>
+            <result column="fan_name" property="user_name" jdbcType="VARCHAR"/>
+            <result column="fan_pwd" property="user_pwd" jdbcType="VARCHAR"/>
+            <result column="fan_head" property="user_head" jdbcType="VARCHAR"/>
+            <result column="fan_mail" property="user_mail" jdbcType="VARCHAR"/>
+            <result column="fan_phone" property="user_phone" jdbcType="VARCHAR"/>
+            <result column="fan_starus" property="user_status" jdbcType="BIT"/>
+        </association>
+    </resultMap>
+    <!--获得粉丝数的sql-->
+    <select id="selectFansCount" parameterType="User" resultType="INTEGER">
+        SELECT
+        COUNT(DISTINCT fan_id)
+        FROM relations
+        WHERE up_id = #{user_id}
+    </select>
+    <!--获得关注数的sql-->
+    <select id="selectUpsCount" parameterType="User" resultType="INTEGER">
+        SELECT
+        COUNT(DISTINCT up_id)
+        FROM relations
+        WHERE fan_id = #{user_id}
+    </select>
+    <!--添加新的关注与被关注的关系-->
+    <insert id="insertRelation" parameterType="Relation">
+        INSERT INTO
+        relations
+        (up_id,fan_id)
+        VALUES
+        (#{up.user_id},#{fan.user_id})
+    </insert>
+    <!--取消关注与被关注的关系-->
+    <delete id="deleteRelation" parameterType="Relation">
+        DELETE FROM
+        relations
+        WHERE
+        up_id=#{up.user_id} AND fan_id=#{fan.user_id}
+    </delete>
+    <!--得到全部的粉丝的用户信息-->
+    <select id="selectAllFans" parameterType="User" resultMap="relationMap">
+        SELECT
+        relation_id,
+        users.user_id fan_id,
+        users.user_name fan_name,
+        users.user_head fan_head
+        FROM relations,users
+        WHERE relations.up_id=#{user_id} AND relations.fan_id=users.user_id
+    </select>
+</mapper>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fanw.socialapp.mapper.ProfileMapper">
+    <!--返回结果的属性和列名的对应，以及他们在数据库里的属性-->
+    <resultMap id="profileMap" type="com.fanw.socialapp.model.Profile">
+        <id column="profile_id" property="profile_id" jdbcType="INTEGER"/>
+        <result column="profile_sign" property="profile_sign" jdbcType="VARCHAR"/>
+        <result column="profile_sex" property="profile_sex" jdbcType="BIT"/>
+        <result column="profile_location" property="profile_location" jdbcType="VARCHAR"/>
+        <association property="user" javaType="com.fanw.socialapp.model.User">
+            <result column="user_id" property="user_id" jdbcType="INTEGER"/>
+            <result column="user_name" property="user_name" jdbcType="VARCHAR"/>
+            <result column="user_pwd" property="user_pwd" jdbcType="VARCHAR"/>
+            <result column="user_head" property="user_head" jdbcType="VARCHAR"/>
+            <result column="user_mail" property="user_mail" jdbcType="VARCHAR"/>
+            <result column="user_phone" property="user_phone" jdbcType="VARCHAR"/>
+            <result column="user_starus" property="user_status" jdbcType="BIT"/>
+        </association>
+    </resultMap>
+
+    <!--profile_id,profile_sign,profile_sex,profile_location,profile_user_id-->
+    <!--多次使用的sql语句里的部分-->
+    <sql id="profile_base_column_list">
+        profile_id,profile_sign,profile_sex,profile_location,profile_user_id user_id
+    </sql>
+    <!--添加一行profile-->
+    <insert id="insertProfileByUserId" parameterType="com.fanw.socialapp.model.User" >
+        INSERT
+        INTO profiles
+        (profile_user_id)
+        VALUES
+        (#{user_id})
+    </insert>
+    <!--依据profile_user_id查询全部的profil信息-->
+    <select id="selectProfileByUserId" parameterType="com.fanw.socialapp.model.User" resultMap="profileMap">
+        SELECT
+        <include refid="profile_base_column_list"/>
+        FROM profiles
+        WHERE profile_user_id = #{user_id};
+    </select>
+    <!--依据profile_id找到需要修改的元组，并且根据profile中信息是否存在修改元组-->
+    <update id="updateProfileById" parameterType="Profile">
+        UPDATE profiles
+        <set>
+            <if test="profile_sign != null">
+                profile_sign = #{profile_sign,jdbcType=VARCHAR},
+            </if>
+            <if test="profile_sex != null">
+                profile_sex = #{profile_sex,jdbcType=BIT},
+            </if>
+            <if test="profile_location != null">
+                profile_location = #{profile_location,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE profile_id = #{profile_id,jdbcType=INTEGER}
+    </update>
+
+</mapper>
