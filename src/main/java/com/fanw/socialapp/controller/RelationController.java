@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -100,10 +101,31 @@ public class RelationController {
         String result = null;
         if(temp != null){
             for (Relation r:temp) {
-                result += r.toString();
+                result += r.toFansString();
             }
         }
         return result;
     }
 
+    /*
+     * 使用用户的user_id来查询出全部的ups的user的全部信息
+     * @param user_id
+     * 返回json
+     * */
+    @RequestMapping(value = "/showAllUps",method = RequestMethod.POST)
+    public String showAllUps(User user){
+        List<Relation> temp = new ArrayList<>();
+        try {
+            temp = relationService.showAllUps(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String result = new String();
+        if(temp != null){
+            for (Relation r:temp) {
+                result += r.toUpsString();
+            }
+        }
+        return result;
+    }
 }
