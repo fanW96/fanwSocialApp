@@ -2,8 +2,10 @@ package com.fanw.socialapp.controller;
 
 
 import com.fanw.socialapp.model.Relation;
+import com.fanw.socialapp.model.RelationJson;
 import com.fanw.socialapp.model.User;
 import com.fanw.socialapp.service.RelationService;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -93,18 +95,22 @@ public class RelationController {
     @RequestMapping(value = "/showAllFans",method = RequestMethod.POST)
     public String showAllFans(User user){
         List<Relation> temp = null;
+        String callback = new String();
         try {
             temp = relationService.showAllFans(user);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String result = null;
+//        String result = null;
+//        if(temp != null){
+//            for (Relation r:temp) {
+//                result += r.toFansString();
+//            }
+//        }
         if(temp != null){
-            for (Relation r:temp) {
-                result += r.toFansString();
-            }
+            callback = new Gson().toJson(new RelationJson(200,"success",temp));
         }
-        return result;
+        return callback;
     }
 
     /*

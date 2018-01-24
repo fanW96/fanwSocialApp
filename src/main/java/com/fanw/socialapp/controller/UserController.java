@@ -2,7 +2,9 @@ package com.fanw.socialapp.controller;
 
 
 import com.fanw.socialapp.model.User;
+import com.fanw.socialapp.model.UserJson;
 import com.fanw.socialapp.service.UserService;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,84 +24,152 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-
     /*
     * 使用邮箱和密码登陆账号
+    * @param user_mail,user_pwd
     * */
     @RequestMapping(value = "/phoneLogin",method = RequestMethod.POST)
     public  String userLoginByPhone(User user){
-        System.out.println(StaticName.savePath);
-        User newUser = userService.loginByPhone(user);
-        if(newUser!= null){
-            newUser.setUser_status(true);
-            if(userService.login_updateStatusById(newUser) == 1){
-                return newUser.toString();
-            }
+//        System.out.println(StaticName.savePath);
+        User newUser = new User();
+        String callback;
+        try {
+            newUser = userService.loginByPhone(user);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return "Fail";
+        callback = loginHelp(newUser);
+        return callback;
     }
 
     /*
-    * 使用电话和密码登陆账号
+    * 使用邮箱和密码登陆账号
+    * @param user_mail,user_pwd
     * */
     @RequestMapping(method = RequestMethod.POST ,value = "/mailLogin")
     public String userLoginByMail(User user){
-        return userService.loginByMail(user).toString();
+        User newUser = new User();
+        String callback;
+        try {
+            newUser = userService.loginByMail(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        callback = loginHelp(newUser);
+        return callback;
     }
 
     /*
-    * @Param:headFile
+    * @Param headFile,user_id
     * 上传头像
     * */
     @RequestMapping(value = "/headUpload",method = RequestMethod.POST)
     public  String userHeadUploadById(User user, @RequestParam("headFile")MultipartFile multipartFile){
+        String callback;
+        int test = 0;
         if(multipartFile.isEmpty()){
-            return  "Empty";
+            callback = new Gson().toJson(new UserJson(500,"not file"));
+        }else{
+            String headFileName = multipartFile.getOriginalFilename();
+            File dest = new File(StaticName.savePath,headFileName);
+            if(!dest.getParentFile().exists()){
+                dest.getParentFile().mkdirs();
+            }
+            try {
+                multipartFile.transferTo(dest);
+                user.setUser_head(StaticName.savePath+headFileName);
+                /*
+                 * 确认user的user_id是存在的
+                 * */
+                test = userService.uploadHeadById(user);
+            } catch (IllegalStateException | IOException e){
+                e.printStackTrace();
+            }
+            if(test == 1){
+                callback = new Gson().toJson(new UserJson(200,"success"));
+            }else{
+                callback = new Gson().toJson(new UserJson(500,"upload wrong,please retry"));
+            }
         }
-        String headFileName = multipartFile.getOriginalFilename();
-        File dest = new File(StaticName.savePath,headFileName);
-        if(!dest.getParentFile().exists()){
-            dest.getParentFile().mkdirs();
-        }
-        try {
-            multipartFile.transferTo(dest);
-//            user.setUser_id(1);
-            user.setUser_head(StaticName.savePath+headFileName);
-            /*
-            * 确认user的user_id是存在的
-            * */
-            int test = userService.uploadHeadById(user);
-//            System.out.println(test);
-//            System.out.println(user.getUser_head());
-            return "Success";
-        } catch (IllegalStateException e){
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "Fail";
+        return callback;
     }
+
     /*
     * 使用邮箱注册
-    * @param user_mail,user_pwd
+    * @param user_mail,user_pwd,user_name
     * */
     @RequestMapping(value = "/mailRegister",method = RequestMethod.POST)
     public String userRegisterByMail(User user){
-        int test = userService.registerUserByMail(user);
-        if(test == 1){
-            return "Success";
+        int test = 0;
+        String callback;
+        try {
+            test = userService.registerUserByMail(user);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return "Fail";
+        if(test == 1){
+            callback = new Gson().toJson(new UserJson(200,"success"));
+        }else{
+            callback = new Gson().toJson(new UserJson(500,"current mail has been used"));
+        }
+        return callback;
     }
 
+    /*
+     * 使用phone注册
+     * @param user_mail,user_pwd,user_name
+     * */
+    @RequestMapping(value = "/phoneRegister",method = RequestMethod.POST)
+    public String userRegisterByPhone(User user){
+        int test = 0;
+        String callback;
+        try {
+            test = userService.registerUserByPhone(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if(test == 1){
+            callback = new Gson().toJson(new UserJson(200,"success"));
+        }else{
+            callback = new Gson().toJson(new UserJson(500,"current phone has been used"));
+        }
+        return callback;
+    }
 
+    /*
+    * 使用用户的id修改掉登陆状态实现登出
+    * @param user_id
+    * */
     @RequestMapping(value = "/signOut",method = RequestMethod.POST)
     public String userSignOutById(User user){
+        String callback;
         user.setUser_status(false);
         if(userService.signOut_updateStatusById(user) == 1){
-            return "sign out success";
+            callback = new Gson().toJson(new UserJson(200,"success"));
+        }else{
+            callback =new Gson().toJson(new UserJson(500,"sign out wrong,please retry"));
         }
-        return "Fail";
+        return callback;
+    }
+
+    /*
+    * 两种登陆方式的辅助
+    * */
+    private String loginHelp(User newUser){
+        String callback;
+        if(newUser!=null && !newUser.isUser_status()){
+            newUser.setUser_status(true);
+            if(userService.login_updateStatusById(newUser) == 1){
+                callback = new Gson().toJson(new UserJson(200,"success",newUser));
+            }else{
+                callback = new Gson().toJson(new UserJson(500,"Login wrong，please retry"));
+            }
+        }else if(newUser!=null && newUser.isUser_status()){
+            callback = new Gson().toJson(new UserJson(500,"current user have login"));
+        }else {
+            callback = new Gson().toJson(new UserJson(500,"no such user,please register before login"));
+        }
+        return callback;
     }
 
 }
