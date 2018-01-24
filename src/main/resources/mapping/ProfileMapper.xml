@@ -15,7 +15,7 @@
             <result column="user_head" property="user_head" jdbcType="VARCHAR"/>
             <result column="user_mail" property="user_mail" jdbcType="VARCHAR"/>
             <result column="user_phone" property="user_phone" jdbcType="VARCHAR"/>
-            <result column="user_starus" property="user_status" jdbcType="BIT"/>
+            <result column="user_status" property="user_status" jdbcType="BIT"/>
         </association>
     </resultMap>
 

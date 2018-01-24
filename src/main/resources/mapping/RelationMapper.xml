@@ -11,7 +11,7 @@
             <result column="up_head" property="user_head" jdbcType="VARCHAR"/>
             <result column="up_mail" property="user_mail" jdbcType="VARCHAR"/>
             <result column="up_phone" property="user_phone" jdbcType="VARCHAR"/>
-            <result column="up_starus" property="user_status" jdbcType="BIT"/>
+            <result column="up_status" property="user_status" jdbcType="BIT"/>
         </association>
         <association property="fan" javaType="com.fanw.socialapp.model.User">
             <result column="fan_id" property="user_id" jdbcType="INTEGER"/>
