@@ -62,4 +62,14 @@
         FROM relations,users
         WHERE relations.up_id=#{user_id} AND relations.fan_id=users.user_id
     </select>
+    <!--得到全部的up主的用户信息-->
+    <select id="selectAllUps" parameterType="User" resultMap="relationMap">
+        SELECT
+        relation_id,
+        users.user_id up_id,
+        users.user_name up_name,
+        users.user_head up_head
+        FROM relations,users
+        WHERE relations.fan_id=#{user_id} AND relations.up_id=users.user_id
+    </select>
 </mapper>
