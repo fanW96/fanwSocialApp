@@ -20,7 +20,7 @@
             <result column="fan_head" property="user_head" jdbcType="VARCHAR"/>
             <result column="fan_mail" property="user_mail" jdbcType="VARCHAR"/>
             <result column="fan_phone" property="user_phone" jdbcType="VARCHAR"/>
-            <result column="fan_starus" property="user_status" jdbcType="BIT"/>
+            <result column="fan_status" property="user_status" jdbcType="BIT"/>
         </association>
     </resultMap>
     <!--获得粉丝数的sql-->
