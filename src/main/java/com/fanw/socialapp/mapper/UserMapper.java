@@ -10,5 +10,6 @@ public interface UserMapper {
     /*update和insert只能使用int作为返回类型，成功的话返回的是1,失败的话返回的是0*/
     int uploadHeadById(User user);
     int insertByMail(User user);
+    int insertByPhone(User user);
     int updateStatusById(User user);
 }

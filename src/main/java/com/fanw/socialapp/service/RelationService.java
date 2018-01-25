@@ -12,4 +12,5 @@ public interface RelationService {
     int createFollow(Relation relation);
     int cancelFollow(Relation relation);
     List<Relation> showAllFans(User user);
+    List<Relation> showAllUps(User user);
 }

@@ -5,11 +5,17 @@ public class Relation {
     private User up;
     private User fan;
 
-    @Override
-    public String toString() {
+    public String toFansString() {
         return "Relation{" +
                 "relation_id=" + relation_id +
                 ", fan=" + fan.toString() +
+                '}';
+    }
+
+    public String toUpsString() {
+        return "Relation{" +
+                "relation_id=" + relation_id +
+                ", up=" + up.toString() +
                 '}';
     }
 

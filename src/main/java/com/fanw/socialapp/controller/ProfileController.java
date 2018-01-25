@@ -24,6 +24,7 @@ public class ProfileController {
     * */
     @RequestMapping(value = "/createProfile",method = RequestMethod.POST)
     public String createProfileByUserId(User user){
+        String callback;
         int ret = 0;
         try {
             ret = profileService.createProfleByUserId(user);
@@ -31,9 +32,11 @@ public class ProfileController {
             e.printStackTrace();
         }
         if(ret == 1){
-            return "success";
+            callback = new Gson().toJson(new ProfileJson(200,"success"));
+        }else{
+            callback = new Gson().toJson(new ProfileJson(500,"profile create wrong,please wait for retry"));
         }
-        return "fail";
+        return callback;
     }
 
     /*
@@ -42,7 +45,7 @@ public class ProfileController {
     * */
     @RequestMapping(value = "/showProfile",method = RequestMethod.POST)
     public String showProfileByUserId(User user){
-        String callback = new String();
+        String callback;
         Profile temp = new Profile();
         try {
             temp = profileService.showProFileByUserId(user);
@@ -51,6 +54,8 @@ public class ProfileController {
         }
         if(temp != null){
             callback = new Gson().toJson(new ProfileJson(200,"success",temp));
+        }else {
+            callback = new Gson().toJson(new ProfileJson(500,"get profile wrong,please wait for retry"));
         }
         return callback;
     }
@@ -61,6 +66,7 @@ public class ProfileController {
     * */
     @RequestMapping(value = "/updateProfile",method = RequestMethod.POST)
     public String updateProfileByProfileId(Profile profile){
+        String callback;
         int ret = 0;
         try {
             ret = profileService.updateProfileById(profile);
@@ -68,8 +74,10 @@ public class ProfileController {
             e.printStackTrace();
         }
         if(ret == 1){
-            return "success";
+            callback = new Gson().toJson(new ProfileJson(200,"success"));
+        }else{
+            callback = new Gson().toJson(new ProfileJson(500,"update profile wrong,please retry"));
         }
-        return "fail";
+        return callback;
     }
 }

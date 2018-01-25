@@ -27,14 +27,16 @@ public class RelationController {
     * @param user_id
     * */
     @RequestMapping(value = "/fansCount",method = RequestMethod.POST)
-    public int getFansCount(User user){
+    public String getFansCount(User user){
+        String callback;
         int temp = 0;
         try {
             temp = relationService.getFansCount(user);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return temp;
+        callback = new Gson().toJson(new RelationJson(200,"success",temp));
+        return callback;
     }
 
     /*
@@ -42,14 +44,16 @@ public class RelationController {
      * @param user_id
      * */
     @RequestMapping(value = "/upsCount",method = RequestMethod.POST)
-    public int getUpsCount(User user){
+    public String getUpsCount(User user){
+        String callback;
         int temp = 0;
         try {
             temp = relationService.getUpsCount(user);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return temp;
+        callback = new Gson().toJson(new RelationJson(200,"success",temp));
+        return callback;
     }
 
     /*
@@ -58,6 +62,7 @@ public class RelationController {
     * */
     @RequestMapping(value = "/follow",method = RequestMethod.POST)
     public String createFollow(Relation relation){
+        String callback;
         int temp = 0;
         try {
             temp = relationService.createFollow(relation);
@@ -65,9 +70,11 @@ public class RelationController {
             e.printStackTrace();
         }
         if(temp ==1){
-            return "success";
+            callback = new Gson().toJson(new RelationJson(200,"success"));
+        }else {
+            callback = new Gson().toJson(new RelationJson(500,"follow wrong,please retry"));
         }
-        return "fail";
+        return callback;
     }
 
     /*
@@ -76,6 +83,7 @@ public class RelationController {
     * */
     @RequestMapping(value = "/cancelFollow",method = RequestMethod.POST)
     public String cancelFollow(Relation relation){
+        String callback;
         int temp = 0;
         try {
             temp = relationService.cancelFollow(relation);
@@ -83,9 +91,11 @@ public class RelationController {
             e.printStackTrace();
         }
         if(temp ==1){
-            return "success";
+            callback = new Gson().toJson(new RelationJson(200,"success"));
+        }else {
+            callback = new Gson().toJson(new RelationJson(500,"cancel follow wrong,please retry"));
         }
-        return "fail";
+        return callback;
     }
 
     /*
@@ -95,20 +105,16 @@ public class RelationController {
     @RequestMapping(value = "/showAllFans",method = RequestMethod.POST)
     public String showAllFans(User user){
         List<Relation> temp = null;
-        String callback = new String();
+        String callback;
         try {
             temp = relationService.showAllFans(user);
         } catch (Exception e) {
             e.printStackTrace();
         }
-//        String result = null;
-//        if(temp != null){
-//            for (Relation r:temp) {
-//                result += r.toFansString();
-//            }
-//        }
         if(temp != null){
             callback = new Gson().toJson(new RelationJson(200,"success",temp));
+        }else {
+            callback = new Gson().toJson(new RelationJson(500,"sorry, no fans"));
         }
         return callback;
     }
@@ -121,17 +127,23 @@ public class RelationController {
     @RequestMapping(value = "/showAllUps",method = RequestMethod.POST)
     public String showAllUps(User user){
         List<Relation> temp = new ArrayList<>();
+        String callback;
         try {
             temp = relationService.showAllUps(user);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String result = new String();
+//        String result = new String();
+//        if(temp != null){
+//            for (Relation r:temp) {
+//                result += r.toUpsString();
+//            }
+//        }
         if(temp != null){
-            for (Relation r:temp) {
-                result += r.toUpsString();
-            }
+            callback = new Gson().toJson(new RelationJson(200,"success",temp));
+        }else {
+            callback = new Gson().toJson(new RelationJson(500,"sorry, no ups"));
         }
-        return result;
+        return callback;
     }
 }

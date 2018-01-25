@@ -40,4 +40,9 @@ public class RelationServiceImpl implements RelationService{
     public List<Relation> showAllFans(User user) {
         return relationMapper.selectAllFans(user);
     }
+
+    @Override
+    public List<Relation> showAllUps(User user) {
+        return relationMapper.selectAllUps(user);
+    }
 }

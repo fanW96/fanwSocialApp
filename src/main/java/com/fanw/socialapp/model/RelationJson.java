@@ -6,6 +6,15 @@ public class RelationJson {
     private int code;
     private String msg;
     private List<Relation> relationList;
+    private int count;
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
 
     public int getCode() {
         return code;
@@ -40,5 +49,11 @@ public class RelationJson {
     public RelationJson(int code, String msg) {
         this.code = code;
         this.msg = msg;
+    }
+
+    public RelationJson(int code, String msg, int count) {
+        this.code = code;
+        this.msg = msg;
+        this.count = count;
     }
 }

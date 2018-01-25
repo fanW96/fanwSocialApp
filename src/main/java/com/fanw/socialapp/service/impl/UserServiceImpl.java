@@ -33,6 +33,11 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public int registerUserByPhone(User user) {
+        return userMapper.insertByPhone(user);
+    }
+
+    @Override
     public int login_updateStatusById(User user) {
         return userMapper.updateStatusById(user);
     }

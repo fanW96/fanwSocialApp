@@ -12,4 +12,5 @@ public interface RelationMapper {
     int insertRelation(Relation relation);
     int deleteRelation(Relation relation);
     List<Relation> selectAllFans(User user);
+    List<Relation> selectAllUps(User user);
 }

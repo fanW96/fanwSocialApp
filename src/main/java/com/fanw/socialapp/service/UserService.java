@@ -7,6 +7,7 @@ public interface UserService {
     User loginByPhone(User user);
     int uploadHeadById(User user);
     int registerUserByMail(User user);
+    int registerUserByPhone(User user);
     int login_updateStatusById(User user);
     int signOut_updateStatusById(User user);
 }
