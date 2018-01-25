@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fanw.socialapp.mapper.EssayMapper">
+    <resultMap id="essayMap" type="com.fanw.socialapp.model.Essay">
+        <result column="essay_id" property="essay_id" jdbcType="INTEGER"/>
+        <result column="essay_content" property="essay_content" jdbcType="TEXT"/>
+        <result column="essay_pic_count" property="essay_pic_count" jdbcType="INTEGER"/>
+        <result column="essay_thumbs" property="essay_thumbs" jdbcType="INTEGER"/>
+        <result column="essay_pic_1" property="essay_pic_1" jdbcType="VARCHAR"/>
+        <result column="essay_pic_2" property="essay_pic_2" jdbcType="VARCHAR"/>
+        <result column="essay_pic_3" property="essay_pic_3" jdbcType="VARCHAR"/>
+        <association property="user" javaType="com.fanw.socialapp.model.User">
+            <result column="user_id" property="user_id" jdbcType="INTEGER"/>
+            <result column="user_name" property="user_name" jdbcType="VARCHAR"/>
+            <result column="user_pwd" property="user_pwd" jdbcType="VARCHAR"/>
+            <result column="user_head" property="user_head" jdbcType="VARCHAR"/>
+            <result column="user_mail" property="user_mail" jdbcType="VARCHAR"/>
+            <result column="user_phone" property="user_phone" jdbcType="VARCHAR"/>
+            <result column="user_status" property="user_status" jdbcType="BIT"/>
+        </association>
+    </resultMap>
+    <!--查询全部的essays-->
+    <select id="selectAllEssays" resultMap="essayMap">
+        SELECT
+        essay_id,essay_content,essay_pic_count,essay_thumbs,
+        essay_user_id user_id,
+        users.user_name user_name,
+        users.user_head user_head,
+        essay_pic_1,essay_pic_2,essay_pic_3
+        FROM essays,users
+        WHERE essays.essay_user_id = users.user_id
+    </select>
+    <!--查询单个essay-->
+    <select id="selectOneEssayById" parameterType="Essay" resultType="Essay">
+        SELECT
+        essay_id,essay_content,essay_pic_count,essay_thumbs,
+        essay_user_id user_id,
+        users.user_name user_name,
+        users.user_head user_head,
+        essay_pic_1,essay_pic_2,essay_pic_3
+        FROM essays,users
+        WHERE essay_id = #{essay_id} AND essays.essay_user_id = users.user_id
+    </select>
+    <!--添加一条新的essay-->
+    <insert id="insertOneEssay" parameterType="Essay">
+        INSERT
+        INTO essays
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="essay_content != null">
+                essay_content,
+            </if>
+            <if test="essay_pic_count != null">
+                essay_pic_count,
+            </if>
+            <if test="essay_user_id != null">
+                essay_user_id,
+            </if>
+            <if test="essay_pic_1 != null">
+                essay_pic_1,
+            </if>
+            <if test="essay_pic_2 != null">
+                essay_pic_2,
+            </if>
+            <if test="essay_pic_3 != null">
+                essay_pic_3,
+            </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides="," >
+            <if test="essay_content != null" >
+                #{essay_content},
+            </if>
+            <if test="essay_pic_count != null" >
+                #{essay_pic_count},
+            </if>
+            <if test="essay_user_id != null" >
+                #{essay_user_id},
+            </if>
+            <if test="essay_pic_1 != null" >
+                #{essay_pic_1},
+            </if>
+            <if test="essay_pic_2 != null" >
+                #{essay_pic_2},
+            </if>
+            <if test="essay_pic_3 != null" >
+                #{essay_pic_3},
+            </if>
+        </trim>
+    </insert>
+    <!--点赞-->
+    <update id="increaseThumbs" parameterType="Essay">
+        UPDATE essays
+        SET
+        essay_thumbs = essay_thumbs+1
+        WHERE
+        essay_id = #{essay_id}
+    </update>
+    <!--取消点赞-->
+    <update id="decreaseThumbs" parameterType="Essay">
+        UPDATE essays
+        SET
+        essay_thumbs = essay_thumbs-1
+        WHERE
+        essay_id = #{essay_id}
+    </update>
+    <!--删除一条essay-->
+    <delete id="deleteOneEssayById" parameterType="Essay">
+        DELETE
+        FROM essays
+        WHERE
+        essay_id = #{essay_id}
+    </delete>
+    <!--查询一个用户的全部essays-->
+    <select id="selectOneUserEssays" parameterType="User" resultMap="essayMap">
+        SELECT
+        essay_id,essay_content,essay_pic_count,essay_thumbs,
+        essay_user_id user_id,
+        users.user_name user_name,
+        users.user_head user_head,
+        essay_pic_1,essay_pic_2,essay_pic_3
+        FROM essays,users
+        WHERE essay_user_id = #{user_id} AND essays.essay_user_id = users.user_id
+    </select>
+</mapper>
