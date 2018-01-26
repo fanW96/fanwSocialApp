@@ -1,5 +1,7 @@
 package com.fanw.socialapp.model;
 
+import java.util.Date;
+
 public class Essay {
     private int essay_id;
     private int essay_pic_count;
@@ -9,6 +11,15 @@ public class Essay {
     private String essay_pic_1;
     private String essay_pic_2;
     private String essay_pic_3;
+    private Date essay_date;
+
+    public Date getEssay_date() {
+        return essay_date;
+    }
+
+    public void setEssay_date(Date essay_date) {
+        this.essay_date = essay_date;
+    }
 
     public String getEssay_pic_1() {
         return essay_pic_1;

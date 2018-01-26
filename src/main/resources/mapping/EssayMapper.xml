@@ -4,12 +4,13 @@
 <mapper namespace="com.fanw.socialapp.mapper.EssayMapper">
     <resultMap id="essayMap" type="com.fanw.socialapp.model.Essay">
         <result column="essay_id" property="essay_id" jdbcType="INTEGER"/>
-        <result column="essay_content" property="essay_content" jdbcType="TEXT"/>
+        <result column="essay_content" property="essay_content" jdbcType="LONGVARCHAR"/>
         <result column="essay_pic_count" property="essay_pic_count" jdbcType="INTEGER"/>
         <result column="essay_thumbs" property="essay_thumbs" jdbcType="INTEGER"/>
         <result column="essay_pic_1" property="essay_pic_1" jdbcType="VARCHAR"/>
         <result column="essay_pic_2" property="essay_pic_2" jdbcType="VARCHAR"/>
         <result column="essay_pic_3" property="essay_pic_3" jdbcType="VARCHAR"/>
+        <result column="essay_date" property="essay_date" jdbcType="TIMESTAMP"/>
         <association property="user" javaType="com.fanw.socialapp.model.User">
             <result column="user_id" property="user_id" jdbcType="INTEGER"/>
             <result column="user_name" property="user_name" jdbcType="VARCHAR"/>
@@ -23,7 +24,7 @@
     <!--查询全部的essays-->
     <select id="selectAllEssays" resultMap="essayMap">
         SELECT
-        essay_id,essay_content,essay_pic_count,essay_thumbs,
+        essay_id,essay_content,essay_pic_count,essay_thumbs,essay_date,
         essay_user_id user_id,
         users.user_name user_name,
         users.user_head user_head,
@@ -34,7 +35,7 @@
     <!--查询单个essay-->
     <select id="selectOneEssayById" parameterType="Essay" resultType="Essay">
         SELECT
-        essay_id,essay_content,essay_pic_count,essay_thumbs,
+        essay_id,essay_content,essay_pic_count,essay_thumbs,essay_date,
         essay_user_id user_id,
         users.user_name user_name,
         users.user_head user_head,
@@ -53,7 +54,7 @@
             <if test="essay_pic_count != null">
                 essay_pic_count,
             </if>
-            <if test="essay_user_id != null">
+            <if test="user.user_id != null">
                 essay_user_id,
             </if>
             <if test="essay_pic_1 != null">
@@ -65,6 +66,9 @@
             <if test="essay_pic_3 != null">
                 essay_pic_3,
             </if>
+            <!--<if test="essay_date != null">
+                essay_date,
+            </if>-->
         </trim>
         <trim prefix="VALUES (" suffix=")" suffixOverrides="," >
             <if test="essay_content != null" >
@@ -73,8 +77,8 @@
             <if test="essay_pic_count != null" >
                 #{essay_pic_count},
             </if>
-            <if test="essay_user_id != null" >
-                #{essay_user_id},
+            <if test="user.user_id != null" >
+                #{user.user_id},
             </if>
             <if test="essay_pic_1 != null" >
                 #{essay_pic_1},
@@ -85,6 +89,9 @@
             <if test="essay_pic_3 != null" >
                 #{essay_pic_3},
             </if>
+            <!--<if test="essay_date != null">
+                #{essay_date},
+            </if>-->
         </trim>
     </insert>
     <!--点赞-->
@@ -113,7 +120,7 @@
     <!--查询一个用户的全部essays-->
     <select id="selectOneUserEssays" parameterType="User" resultMap="essayMap">
         SELECT
-        essay_id,essay_content,essay_pic_count,essay_thumbs,
+        essay_id,essay_content,essay_pic_count,essay_thumbs,essay_date,
         essay_user_id user_id,
         users.user_name user_name,
         users.user_head user_head,

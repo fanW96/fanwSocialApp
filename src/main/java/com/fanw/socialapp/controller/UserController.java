@@ -15,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 @RestController
@@ -67,17 +69,20 @@ public class UserController {
     public  String userHeadUploadById(User user, @RequestParam("headFile")MultipartFile multipartFile){
         String callback;
         int test = 0;
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
         if(multipartFile.isEmpty()){
             callback = new Gson().toJson(new UserJson(500,"not file"));
         }else{
             String headFileName = multipartFile.getOriginalFilename();
-            File dest = new File(StaticName.savePath,headFileName);
+            String suffix = headFileName.substring(headFileName.lastIndexOf(".")+1);
+            String temp = user.getUser_id()+df.format(new Date())+(int)(Math.random()*100)+"."+suffix;
+            File dest = new File(StaticName.headSavePath,temp);
             if(!dest.getParentFile().exists()){
                 dest.getParentFile().mkdirs();
             }
             try {
                 multipartFile.transferTo(dest);
-                user.setUser_head(StaticName.savePath+headFileName);
+                user.setUser_head(StaticName.headSavePath+temp);
                 /*
                  * 确认user的user_id是存在的
                  * */
