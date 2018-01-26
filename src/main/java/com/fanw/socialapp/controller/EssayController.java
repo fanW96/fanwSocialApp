@@ -182,7 +182,7 @@ public class EssayController {
         }
         try {
             pic.transferTo(pic_dest);
-            return StaticName.picSavePath+pic_temp;
+            return pic_temp;
         } catch (IllegalStateException | IOException e){
             e.printStackTrace();
             return null;

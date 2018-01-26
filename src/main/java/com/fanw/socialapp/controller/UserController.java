@@ -82,7 +82,7 @@ public class UserController {
             }
             try {
                 multipartFile.transferTo(dest);
-                user.setUser_head(StaticName.headSavePath+temp);
+                user.setUser_head(temp);
                 /*
                  * 确认user的user_id是存在的
                  * */
