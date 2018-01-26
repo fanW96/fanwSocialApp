@@ -9,3 +9,7 @@
 - 用户fans，ups的获取，新的follow，取消follow
 - 个人部分接口返回信息全部修改为Json格式
 - essay的发表，查询，点赞
+- comment的发表，删除，查询
+
+## 存在的问题
+- 显示一个用户收到的全部comment的时候，无法再sql语句中直接获得相应评论人的name，head
