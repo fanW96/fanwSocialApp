@@ -106,6 +106,7 @@ public class UserController {
     @RequestMapping(value = "/mailRegister",method = RequestMethod.POST)
     public String userRegisterByMail(User user){
         int test = 0;
+
         String callback;
         try {
             test = userService.registerUserByMail(user);
@@ -113,7 +114,13 @@ public class UserController {
             e.printStackTrace();
         }
         if(test == 1){
-            callback = new Gson().toJson(new UserJson(200,"success"));
+            User newUser = new User();
+            try {
+                newUser = userService.loginByMail(user);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            callback = new Gson().toJson(new UserJson(200,"success",newUser));
         }else{
             callback = new Gson().toJson(new UserJson(500,"current mail has been used"));
         }
@@ -134,7 +141,13 @@ public class UserController {
             e.printStackTrace();
         }
         if(test == 1){
-            callback = new Gson().toJson(new UserJson(200,"success"));
+            User newUser = new User();
+            try {
+                newUser = userService.loginByPhone(user);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            callback = new Gson().toJson(new UserJson(200,"success",newUser));
         }else{
             callback = new Gson().toJson(new UserJson(500,"current phone has been used"));
         }
