@@ -6,8 +6,8 @@ import com.fanw.socialapp.model.User;
 import java.util.List;
 
 public interface EssayService {
-    List<Essay> showAllEssays();
-    List<Essay> showOneUserEssays(User user);
+    List<Essay> showAllEssays(int pageNum, int pageSize);
+    List<Essay> showOneUserEssays(int pageNum, int pageSize,User user);
     int createOneEssay(Essay essay);
     int deleteOneEssayById(Essay essay);
     int giveThumb(Essay essay);

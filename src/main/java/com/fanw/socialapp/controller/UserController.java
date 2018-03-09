@@ -27,7 +27,7 @@ public class UserController {
     private UserService userService;
 
     /*
-    * 使用邮箱和密码登陆账号
+    * 使用电话和密码登陆账号
     * @param user_mail,user_pwd
     * */
     @RequestMapping(value = "/phoneLogin",method = RequestMethod.POST)

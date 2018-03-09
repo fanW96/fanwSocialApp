@@ -14,7 +14,7 @@
     </resultMap>
     <!--多次使用的sql语句里的部分-->
     <sql id="user_base_column_list">
-        user_id,user_name,user_pwd,user_mail,user_phone,user_status
+        user_id,user_name,user_pwd,user_mail,user_phone,user_status,user_head
     </sql>
     <!--selectByMail的映射的查询语句-->
     <select id="selectByMail" resultMap="userMap" parameterType="User">

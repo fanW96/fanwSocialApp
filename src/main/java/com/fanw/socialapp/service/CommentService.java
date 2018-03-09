@@ -9,7 +9,7 @@ import java.util.List;
 public interface CommentService {
     int createOneComment(Comment comment);
     int deleteOneComment(Comment comment);
-    List<Comment> showOneEssayComments(Essay essay);
-    List<Comment> showOneUserComments(User user);
-    List<Comment> showReceivedComments(User user);
+    List<Comment> showOneEssayComments(int pageNum, int pageSize,Essay essay);
+    List<Comment> showOneUserComments(int pageNum, int pageSize,User user);
+    List<Comment> showReceivedComments(int pageNum, int pageSize,User user);
 }

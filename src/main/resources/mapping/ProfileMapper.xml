@@ -22,7 +22,12 @@
     <!--profile_id,profile_sign,profile_sex,profile_location,profile_user_id-->
     <!--多次使用的sql语句里的部分-->
     <sql id="profile_base_column_list">
-        profile_id,profile_sign,profile_sex,profile_location,profile_user_id user_id
+        profile_id,profile_sign,
+        profile_sex,
+        profile_location,
+        profile_user_id user_id,
+        users.user_head user_head,
+        users.user_name user_name
     </sql>
     <!--添加一行profile-->
     <insert id="insertProfileByUserId" parameterType="com.fanw.socialapp.model.User" >
@@ -35,9 +40,15 @@
     <!--依据profile_user_id查询全部的profil信息-->
     <select id="selectProfileByUserId" parameterType="com.fanw.socialapp.model.User" resultMap="profileMap">
         SELECT
-        <include refid="profile_base_column_list"/>
-        FROM profiles
-        WHERE profile_user_id = #{user_id};
+        profile_id,
+        profile_sign,
+        profile_sex,
+        profile_location,
+        profile_user_id user_id,
+        users.user_head user_head,
+        users.user_name user_name
+        FROM profiles,users
+        WHERE profile_user_id = #{user_id} AND users.user_id = profiles.profile_user_id;
     </select>
     <!--依据profile_id找到需要修改的元组，并且根据profile中信息是否存在修改元组-->
     <update id="updateProfileById" parameterType="Profile">

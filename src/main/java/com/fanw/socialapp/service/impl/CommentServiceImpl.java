@@ -5,6 +5,7 @@ import com.fanw.socialapp.model.Comment;
 import com.fanw.socialapp.model.Essay;
 import com.fanw.socialapp.model.User;
 import com.fanw.socialapp.service.CommentService;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,17 +28,20 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public List<Comment> showOneEssayComments(Essay essay) {
+    public List<Comment> showOneEssayComments(int pageNum, int pageSize,Essay essay) {
+        PageHelper.startPage(pageNum, pageSize);
         return commentMapper.selectOneEssayComments(essay);
     }
 
     @Override
-    public List<Comment> showOneUserComments(User user) {
+    public List<Comment> showOneUserComments(int pageNum, int pageSize,User user) {
+        PageHelper.startPage(pageNum, pageSize);
         return commentMapper.selectOneUserComments(user);
     }
 
     @Override
-    public List<Comment> showReceivedComments(User user) {
+    public List<Comment> showReceivedComments(int pageNum, int pageSize,User user) {
+        PageHelper.startPage(pageNum, pageSize);
         return commentMapper.selectReceivedComments(user);
     }
 }

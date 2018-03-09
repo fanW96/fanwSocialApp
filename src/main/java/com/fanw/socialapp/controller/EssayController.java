@@ -8,10 +8,7 @@ import com.fanw.socialapp.util.StaticName;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -31,13 +28,14 @@ public class EssayController {
 
     /*
     * 获取全部的essay
+    * @PathVariable请求动态参数
     * */
-    @RequestMapping(value = "/showAll",method = RequestMethod.GET)
-    public String showAllEssays(){
+    @RequestMapping(value = "/showAll/{pageNum}/{pageSize}",method = RequestMethod.GET)
+    public String showAllEssays(@PathVariable("pageNum") int pageNum, @PathVariable("pageSize") int pageSize){
         String callback;
         List<Essay> temp = new ArrayList<>();
         try {
-            temp = essayService.showAllEssays();
+            temp = essayService.showAllEssays(pageNum,pageSize);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -70,12 +68,12 @@ public class EssayController {
     * 获取一位用户的全部essay
     * @param user_id
     * */
-    @RequestMapping(value = "/showOneUser",method = RequestMethod.POST)
-    public String showOneUserEssays(User user){
+    @RequestMapping(value = "/showOneUser/{pageNum}/{pageSize}",method = RequestMethod.POST)
+    public String showOneUserEssays(@PathVariable("pageNum") int pageNum, @PathVariable("pageSize") int pageSize,User user){
         String callback;
         List<Essay> temp = new ArrayList<>();
         try {
-            temp = essayService.showOneUserEssays(user);
+            temp = essayService.showOneUserEssays(pageNum,pageSize,user);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -170,6 +168,16 @@ public class EssayController {
         }
         return callback;
     }
+
+    /*
+    * 发表一条essay
+    * @param essay_content,essay_pic_count,user.user_id,pic_1
+    * */
+
+    /*
+    * 发表一条essay
+    * @param essay_content,essay_pic_count,user.user_id,pic_1,pic_2
+    * */
 
     public String getNewFileName(MultipartFile pic,int id){
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");

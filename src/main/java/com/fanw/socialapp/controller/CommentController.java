@@ -7,6 +7,7 @@ import com.fanw.socialapp.model.User;
 import com.fanw.socialapp.service.CommentService;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -59,11 +60,11 @@ public class CommentController {
      * 显示一条essay的全部评论
      * @param essay_id
      * */
-    @RequestMapping(value = "/showAll",method = RequestMethod.POST)
-    public String showOneEssayComments(Essay essay){
+    @RequestMapping(value = "/showAll/{pageNum}/{pageSize}",method = RequestMethod.POST)
+    public String showOneEssayComments(@PathVariable("pageNum") int pageNum, @PathVariable("pageSize") int pageSize, Essay essay){
         List<Comment> temp = new ArrayList<>();
         String callback;
-        temp = commentService.showOneEssayComments(essay);
+        temp = commentService.showOneEssayComments(pageNum,pageSize,essay);
         if(temp != null){
             callback = new Gson().toJson(new CommentJson(200,"success",temp));
         }else{
@@ -76,11 +77,11 @@ public class CommentController {
      * 显示一个用户发表的全部评论
      * @param user_id
      * */
-    @RequestMapping(value = "/showPassed",method = RequestMethod.POST)
-    public String showOneUserComments(User user){
+    @RequestMapping(value = "/showPassed/{pageNum}/{pageSize}",method = RequestMethod.POST)
+    public String showOneUserComments(@PathVariable("pageNum") int pageNum, @PathVariable("pageSize") int pageSize,User user){
         List<Comment> temp = new ArrayList<>();
         String callback;
-        temp = commentService.showOneUserComments(user);
+        temp = commentService.showOneUserComments(pageNum,pageSize,user);
         if(temp != null){
             callback = new Gson().toJson(new CommentJson(200,"success",temp));
         }else{
@@ -95,11 +96,11 @@ public class CommentController {
      * error 没有想到如何解决查询一个user_id对应的收到的评论的评论人的name,head
      * 暂时先只取出相应评论人的id,在单独取出相应的name,head
      * */
-    @RequestMapping(value = "/showReceived",method = RequestMethod.POST)
-    public String showReceivedComments(User user){
+    @RequestMapping(value = "/showReceived/{pageNum}/{pageSize}",method = RequestMethod.POST)
+    public String showReceivedComments(@PathVariable("pageNum") int pageNum, @PathVariable("pageSize") int pageSize,User user){
         List<Comment> temp = new ArrayList<>();
         String callback;
-        temp = commentService.showReceivedComments(user);
+        temp = commentService.showReceivedComments(pageNum,pageSize,user);
         if(temp != null){
             callback = new Gson().toJson(new CommentJson(200,"success",temp));
         }else{

@@ -31,6 +31,7 @@
         essay_pic_1,essay_pic_2,essay_pic_3
         FROM essays,users
         WHERE essays.essay_user_id = users.user_id
+        ORDER BY essay_id DESC
     </select>
     <!--查询单个essay-->
     <select id="selectOneEssayById" parameterType="Essay" resultType="Essay">
@@ -127,5 +128,6 @@
         essay_pic_1,essay_pic_2,essay_pic_3
         FROM essays,users
         WHERE essay_user_id = #{user_id} AND essays.essay_user_id = users.user_id
+        ORDER BY essay_id DESC 
     </select>
 </mapper>
