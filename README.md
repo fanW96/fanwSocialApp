@@ -11,5 +11,10 @@
 - essay的发表，查询，点赞
 - comment的发表，删除，查询
 
+## 需要补充
+- essay的分页效果，帮助前端实现底部记载的效果
+- essay/create方法下的pic_1,pic_2,pic_3全部需要提供，没有办法提供null，尝试再添加两条mapping或者找到允许不传值的方法
+- 使用user_id获得profile的时候同时返回user_name等必要的信息，节约一次请求的时间
+
 ## 存在的问题
 - 显示一个用户收到的全部comment的时候，无法再sql语句中直接获得相应评论人的name，head
