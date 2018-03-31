@@ -28,7 +28,7 @@ public class UserController {
 
     /*
     * 使用电话和密码登陆账号
-    * @param user_mail,user_pwd
+    * @param user_phone,user_pwd
     * */
     @RequestMapping(value = "/phoneLogin",method = RequestMethod.POST)
     public  String userLoginByPhone(User user){
@@ -129,7 +129,7 @@ public class UserController {
 
     /*
      * 使用phone注册
-     * @param user_mail,user_pwd,user_name
+     * @param user_phone,user_pwd,user_name
      * */
     @RequestMapping(value = "/phoneRegister",method = RequestMethod.POST)
     public String userRegisterByPhone(User user){
@@ -145,6 +145,7 @@ public class UserController {
             try {
                 newUser = userService.loginByPhone(user);
             } catch (Exception e) {
+                
                 e.printStackTrace();
             }
             callback = new Gson().toJson(new UserJson(200,"success",newUser));
