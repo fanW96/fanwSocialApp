@@ -96,6 +96,7 @@ public class CommentController {
      * error 没有想到如何解决查询一个user_id对应的收到的评论的评论人的name,head
      * 暂时先只取出相应评论人的id,在单独取出相应的name,head
      * */
+    //TODO 获取收到的评论
     @RequestMapping(value = "/showReceived/{pageNum}/{pageSize}",method = RequestMethod.POST)
     public String showReceivedComments(@PathVariable("pageNum") int pageNum, @PathVariable("pageSize") int pageSize,User user){
         List<Comment> temp = new ArrayList<>();
