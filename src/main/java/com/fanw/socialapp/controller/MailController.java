@@ -4,10 +4,12 @@ package com.fanw.socialapp.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -26,7 +28,7 @@ public class MailController {
     private JavaMailSender mailSender;
 
 
-    @RequestMapping("/simple")
+    @RequestMapping(value = "/simple",method = RequestMethod.POST)
     public void sendMail(){
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("fanw9611@163.com");
@@ -36,7 +38,7 @@ public class MailController {
         this.mailSender.send(message);
     }
 
-    @RequestMapping("/find")
+    @RequestMapping(value = "/find",method = RequestMethod.POST)
     public void sendTemplateMail(){
         Context context = new Context();
         context.setVariable("id","006");
